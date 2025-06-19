@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: always
+    ports:
+      - "3000:3000"     # AdGuard Home web界面
+      - "9090:80/tcp"   # Web管理界面 (HTTP)
+      - "53:53/tcp"     # DNS (TCP)
+      - "53:53/udp"     # DNS (UDP)
+    volumes:
+      - ./adguardhome/work:/opt/adguardhome/work
+      - ./adguardhome/conf:/opt/adguardhome/conf
+    environment:
+      - TZ=Asia/Shanghai
+
+  smartdns:
+    image: pymumu/smartdns:latest
+    container_name: smartdns
+    restart: always
+    ports:
+      - "5353:5353/udp"   # SmartDNS 监听端口（DNS UDP）
+      - "5353:5353/tcp"   # SmartDNS 监听端口（DNS TCP）
+    volumes:
+      - ./smartdns:/etc/smartdns
+    environment:
+      - TZ=Asia/Shanghai
